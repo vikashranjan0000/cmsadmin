@@ -15,8 +15,14 @@ if($_GET['action'] = 'edit' && isset($_GET['id'])){
 $teammembername  = (isset($output['teammembername'])&& !empty($output['teammembername']))?$output['teammembername']:'';
 $iscoordinator = (isset($output['iscoordinator'])&& !empty($output['iscoordinator']))?$output['iscoordinator']:0;
 $iscentralcordinator  = (isset($output['iscentralcordinator'])&& !empty($output['iscentralcordinator']))?$output['iscentralcordinator']:0;
+$isacharya  = (isset($output['isacharya'])&& !empty($output['isacharya']))?$output['isacharya']:0;
 $stateid  = (isset($output['stateid'])&& !empty($output['stateid']))?$output['stateid']:'';
 $language  = (isset($output['language'])&& !empty($output['language']))?$output['language']:'';
+$emailid  = (isset($output['emailid'])&& !empty($output['emailid']))?$output['emailid']:'';
+$phoneno  = (isset($output['phoneno'])&& !empty($output['phoneno']))?$output['phoneno']:'';
+$zone  = (isset($output['zone'])&& !empty($output['zone']))?$output['zone']:'';
+
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 //echo "<PRE>";print_r($_POST);die;
@@ -24,18 +30,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $teammembername = trim($_POST['teammembername']);
     $iscoordinator = (isset($_POST['iscoordinator'])&& !empty($_POST['iscoordinator']))?$_POST['iscoordinator']:0;
     $iscentralcordinator  = (isset($_POST['iscentralcordinator'])&& !empty($_POST['iscentralcordinator']))?$_POST['iscentralcordinator']:0;
+    $isacharya  = (isset($_POST['isacharya'])&& !empty($_POST['isacharya']))?$_POST['isacharya']:0;
     $stateid   = $postState[0];
     $countryid  = $postState[1];
     $language = trim($_POST['language']);
+    $emailid = trim($_POST['emailid']);
+    $phoneno = trim($_POST['phoneno']);
+    $zone = trim($_POST['zone']);
     if (!empty($teammembername)) {
         if($_POST['action'] == 'add'){
-               $sql = "INSERT INTO tb_od_teammember(teammembername , iscoordinator,iscentralcordinator,stateid,countryid,language,status)
-            VALUES ('" . $teammembername . "','" . $iscoordinator . "', '" . $iscentralcordinator . "', '" . $stateid . "','" . $countryid . "','" . $language . "',1)";
+               $sql = "INSERT INTO tb_od_teammember(teammembername,zone ,emailid,phoneno, iscoordinator,iscentralcordinator,isacharya,stateid,countryid,language,status)
+            VALUES ('" . $teammembername . "','" . $zone . "','" . $emailid . "','" . $phoneno . "','" . $iscoordinator . "', '" . $iscentralcordinator . "', '" . $isacharya . "', '" . $stateid . "','" . $countryid . "','" . $language . "',1)";
         }else{
             $id = $_GET['id'];
-             $sql= "UPDATE tb_od_teammember SET teammembername='$teammembername',iscoordinator='$iscoordinator', stateid= '$stateid' ,countryid= '$countryid',language='$language' WHERE teammemberid=$id";
+             $sql= "UPDATE tb_od_teammember SET teammembername='$teammembername',zone='$zone',emailid='$emailid',phoneno='$phoneno',iscentralcordinator='$iscentralcordinator',iscoordinator='$iscoordinator',isacharya='$isacharya', stateid= '$stateid' ,countryid= '$countryid',language='$language' WHERE teammemberid=$id";
         }
        mysqli_query($link, $sql);
+       if(mysqli_error($link)){
+        echo("Error description 2: " . mysqli_error($link));die;
+    }
         header("Location: teammember_add_edit.php?action=add&msg=1");
     } else {
         header("Location: teammember_add_edit.php?action=add&msg=0");
@@ -54,9 +67,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <div id="content">
     <!--breadcrumbs-->
     <div id="content-header">
-        <div id="breadcrumb"> <a href="teammember_add_edit.php" title="Go to Home" class="tip-bottom"><i
+        <div id="breadcrumb"> <a href="teammember_list.php" title="Go to Home" class="tip-bottom"><i
                     class="icon-home"></i>
-                Listing</a><a href="#">Add Team Memeber</a></div>
+                Listing</a><a class="current" href="#">Add Team Memeber</a></div>
     </div>
     <!--End-breadcrumbs-->
 
@@ -92,6 +105,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     value="<?php echo $teammembername?>">
                                 <span class="span10" style="color:#c1c1c1">Maximum 200 charecters allowed</span>
                             </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label"><strong> Zone :</strong></label>
+                            <div class="controls">
+                                <input class="span11" style="height:35px" placeholder="Enter  zone"
+                                    type="text" name="zone" id="zone" required
+                                    value="<?php echo $zone?>">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label"><strong> Email id * :</strong></label>
+                            <div class="controls">
+                                <input class="span11" style="height:35px" placeholder="Enter Email id"
+                                    type="text" name="emailid" id="emailid" required
+                                    value="<?php echo $emailid?>">
+                                <span class="span10" style="color:#c1c1c1">Maximum 200 charecters allowed</span>
+                            </div>
+
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label"><strong> Phone no. * :</strong></label>
+                            <div class="controls">
+                                <input class="span11" style="height:35px" placeholder="Enter phone no"
+                                    type="text" name="phoneno" id="phoneno" required
+                                    value="<?php echo $phoneno?>">
+                                <span class="span10" style="color:#c1c1c1">Maximum 200 charecters allowed</span>
+                            </div>
 
                         </div>
                         <div class="control-group">
@@ -108,6 +148,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                 <?php echo (!empty($iscentralcordinator) && $iscentralcordinator==1) ? "checked" : ""?>
                                                 name="iscentralcordinator" type="checkbox"></span></div>is Central
                                     coordinator
+                                </label>
+                                <label class="span2 m-wrap">
+                                    <div class="checker" id="uniform-undefined"><span><input value="1"
+                                                <?php echo (!empty($isacharya) && $isacharya==1) ? "checked" : ""?>
+                                                name="isacharya" type="checkbox"></span></div>is Acharya
+                                    
                                 </label>
                             </div>
                         </div>
@@ -169,9 +215,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <script>
 function validate() {
     var name = $("#teammembername").val();
-
+    var emailid = $("#emailid").val();
+    var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
     if (name.trim() == '') {
         alert('Kindly enter Team member Name');
+        return false;
+    }
+    if (!emailReg.test(emailid)) {
+        alert("Please enter valid email id");
         return false;
     }
 }

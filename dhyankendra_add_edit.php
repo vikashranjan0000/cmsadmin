@@ -50,6 +50,9 @@ $status  = $_POST['status'];
           $sql= "UPDATE tb_od_dhyankendra SET dhyankendraname='$dhyankendraname',Address1='$address1', Address2= '$address2' ,Address3= '$address3' ,countryid='$countryid',zipcode='$zipcode',ownerid='$ownerid',emailid='$emailid',language='$language',stateid='$stateid',countryid='$countryid' WHERE dhyankendraid=$id";
         }
         mysqli_query($link, $sql);
+        if(mysqli_error($link)){
+            echo("Error description 1: " . mysqli_error($link));die;
+        }
         header("Location: dhyankendra_add_edit.php?action=add&msg=1");
     } else {
         header("Location: dhyankendra_add_edit.php?action=add&msg=0");
@@ -68,9 +71,9 @@ $status  = $_POST['status'];
 <div id="content">
     <!--breadcrumbs-->
     <div id="content-header">
-        <div id="breadcrumb"> <a href="dhyankendra_add_edit.php" title="Go to Home" class="tip-bottom"><i
+        <div id="breadcrumb"> <a href="dhyankendra_list.php" title="Go to Home" class="tip-bottom"><i
                     class="icon-home"></i>
-                Listing</a><a href="#">Add Dhyan Kendra</a></div>
+                Listing</a><a class="current" href="#">Add Dhyan kendra</a></div>
     </div>
     <!--End-breadcrumbs-->
 
