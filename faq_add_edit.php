@@ -7,37 +7,39 @@
 $action = $_GET['action'];
 if($_GET['action'] = 'edit' && isset($_GET['id'])){
   $id = $_GET['id'];
-    $sql = "Select * from   tb_od_gurus where guruid=$id";
+    $sql = "Select * from   tb_od_faq where faqid=$id";
     $result = mysqli_query($link, $sql);
     $output = mysqli_fetch_assoc($result);
 }
-$guruname = (isset($output['guruname'])&& !empty($output['guruname']))?$output['guruname']:'';
+$pagename = (isset($output['pagename'])&& !empty($output['pagename']))?$output['pagename']:'';
+$title = (isset($output['title'])&& !empty($output['title']))?$output['title']:'';
+$remarks = (isset($output['remarks'])&& !empty($output['remarks']))?$output['remarks']:'';
 $shortdescription = (isset($output['shortdescription'])&& !empty($output['shortdescription']))?$output['shortdescription']:'';
 $longdescription  = (isset($output['longdescription'])&& !empty($output['longdescription']))?$output['longdescription']:'';
 $language  = (isset($output['language'])&& !empty($output['language']))?$output['language']:'';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-//echo "<PRE>";print_r($_POST);die;
-    $guruname = trim($_POST['guruname']);
-    $short_description = trim($_POST['description']);
+    $pagename = trim($_POST['pagename']);
+    $title = trim($_POST['title']);
+    $remarks = trim($_POST['remarks']);
+    $short_description = trim($_POST['shortdescription']);
     $long_description = trim($_POST['details']);
-    $categoryid = implode(',',$_POST['categoryid']);
      $language = $_POST['language'];
-    if (!empty($guruname)) {
+    if (!empty($short_description)) {
         if($_POST['action'] == 'add'){
-            $sql = "INSERT INTO tb_od_gurus(guruname , shortdescription,longdescription,status,language)
-            VALUES ('" . $guruname . "','" . $short_description . "', '" . $long_description . "',1,'" . $language . "')";
+            $sql = "INSERT INTO tb_od_faq(pagename,title,remarks,shortdescription,longdescription,status,language)
+            VALUES ('" . $pagename . "','" . $title . "','" . $remarks . "','" . $short_description . "', '" . $long_description . "',1,'" . $language . "')";
         }else{
             $id = $_GET['id'];
-          $sql= "UPDATE tb_od_gurus SET shortdescription='$short_description', guruname= '$guruname' ,language= '$language',longdescription='$long_description' WHERE guruid=$id";
+          $sql= "UPDATE tb_od_faq SET pagename='$pagename' ,title='$title' ,remarks='$remarks' ,shortdescription='$short_description' ,language= '$language',longdescription='$long_description' WHERE faqid=$id";
         }
        mysqli_query($link, $sql);
        if(mysqli_error($link)){
         echo("Error description 1: " . mysqli_error($link));die;
     }
-        header("Location: guru_add_edit.php?action=add&msg=1");
+        header("Location: faq_add_edit.php?action=add&msg=1");
     } else {
-        header("Location: guru_add_edit.php?action=add&msg=0");
+        header("Location: faq_add_edit.php?action=add&msg=0");
     }
 }
 
@@ -53,8 +55,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <div id="content">
     <!--breadcrumbs-->
     <div id="content-header">
-        <div id="breadcrumb"> <a href="guru_list.php" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>
-                Listing</a><a href="#">Add Guru</a></div>
+        <div id="breadcrumb"> <a href="faq_list.php" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>
+                Listing</a><a href="#">Add Pages</a></div>
     </div>
     <!--End-breadcrumbs-->
 
@@ -66,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="row-fluid">
             <div class="widget-box">
                 <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
-                    <h4>Add Guru</h4>
+                    <h4>Add Pages</h4>
                 </div>
                 <?php
                 if (isset($_GET['msg']) && $_GET['msg'] == '1') {
@@ -83,18 +85,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <input type="hidden" name="action" id="action" value="<?php echo $action ?>" />
 
                         <div class="control-group">
-                            <label class="control-label"><strong>Guru Name * :</strong></label>
+                            <label class="control-label"><strong>Page Name * :</strong></label>
                             <div class="controls">
-                                <input class="span11" style="height:35px" placeholder="Guru Name" type="text"
-                                    name="guruname" id="guruname" required value="<?php echo $guruname?>">
-                                <span class="span10" style="color:#c1c1c1">Maximum 200 charecters allowed</span>
+                                <input class="span11" style="height:35px" placeholder="Page Name" type="text"
+                                    name="pagename" id="pagename" required value="<?php echo $pagename?>">
+                                <!-- <span class="span10" style="color:#c1c1c1">Maximum 200 charecters allowed</span>-->
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label"><strong>Title * :</strong></label>
+                            <div class="controls">
+                                <input class="span11" style="height:35px" placeholder="Title" type="text"
+                                    name="title" id="title"  value="<?php echo $title?>">
+                                <!-- <span class="span10" style="color:#c1c1c1">Maximum 200 charecters allowed</span>-->
                             </div>
                         </div>
                         <div class="control-group">
                             <label class="control-label"><strong>Short Description * :</strong></label>
                             <div class="controls">
-                                <input class="span11" style="height:35px" placeholder="Short Description" type="text"
-                                    name="description" id="description"  value="<?php echo $shortdescription?>">
+                                <input class="span11" style="height:50px" placeholder="Short Description" type="text"
+                                    name="shortdescription" id="shortdescription"  value="<?php echo $shortdescription?>">
                                 <!-- <span class="span10" style="color:#c1c1c1">Maximum 200 charecters allowed</span>-->
                             </div>
                         </div>
@@ -114,12 +125,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </div>
                         </div>
 
-                        <?php 
-                        $sqlcat = "Select * from   tb_od_guruscategory where status=1 order by categoryid desc";
-                        $resultcat = mysqli_query($link, $sqlcat);
-                        ?>
-
-
+                
 
                         <div class="control-group">
                             <label class="control-label"><strong>Long Description* :</strong></label>
@@ -144,10 +150,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     });
                                     </script>
                             </div>
+                            <div class="control-group">
+                            <label class="control-label"><strong>Remarks * :</strong></label>
+                            <div class="controls">
+                                <input class="span11" style="height:40px" placeholder="remarks" type="text"
+                                    name="remarks" id="remarks"  value="<?php echo $remarks?>">
+                                <!-- <span class="span10" style="color:#c1c1c1">Maximum 200 charecters allowed</span>-->
+                            </div>
+                        </div>
                             <div class="form-actions">
                                 <button onclick="return validate()" type="submit" class="btn btn-primary" name="save"
                                     value="1">Publish</button>
-                                <a href="guru_list.php"><input type="button" class="btn btn-danger" value="Cancel"></a>
+                                <a href="faq_list.php"><input type="button" class="btn btn-danger" value="Cancel"></a>
                             </div>
                     </form>
 
@@ -160,10 +174,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <script>
 function validate() {
-    var guruname = $("#guruname").val();
-    var categoryid = $("#categoryid").val();
-    if (guruname.trim() == '') {
-        alert('Kindly enter Guru Name');
+    var pagename = $("#pagename").val();
+    if (pagename.trim() == '') {
+        alert('Kindly enter Page name');
         return false;
     }
     if (CKEDITOR.instances['details'].getData() == "") {
