@@ -7,28 +7,29 @@
 
 $parent = (isset($output['parent'])&& !empty($output['parent']))?$output['parent']:'';
 $foldername = (isset($output['foldername'])&& !empty($output['foldername']))?$output['foldername']:'';
+$folderTitle = (isset($output['folderTitle'])&& !empty($output['folderTitle']))?$output['folderTitle']:'';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $foldername = strtolower(trim($_POST['foldername']));
     $foldername = str_replace(' ', '-', $foldername); // Replaces all spaces with hyphens.
     $foldername= preg_replace('/[^A-Za-z0-9\-]/', '', $foldername); // Removes special chars.
+    $folderid = time();
     
     $exists = false;
     if($_POST['parent'] =='0'){
-         $path = 'uploads/'.$foldername;
+         $path = 'uploads/'.$folderid;
         if(!is_dir($path)){
-            mkdir($path, 0777) ;
+            mkdir($path, 0777, true) ;
         }else{
             $exists = true; 
         } 
        $parent =0;
        $parent_name = 'uploads';
     }else{
-        $explode = explode('++',$_POST['parent']);
-       
-        $path = 'uploads/'.$explode['1'].'/'.$foldername;
+        $explode = explode('++',$_POST['parent']);       
+        $path = 'uploads/'.$explode['1'].'/'.$folderid;
         if(!is_dir($path)){
-            mkdir($path, 0777) ;
+            mkdir($path, 0777, true) ;
         }else{
             $exists = true; 
         } 
@@ -37,8 +38,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     }
     if (!empty($foldername) && (!$exists)) {
-           $sql = "INSERT INTO tb_od_folder(foldername ,parent,parent_name,path)
-            VALUES ('" . $foldername . "','" . $parent . "','" . $parent_name . "','" . $path . "')";
+           $sql = "INSERT INTO tb_od_folder(foldername, folderId , folderTitle,parent,parent_name,path)
+            VALUES ('" . $foldername . "','" . $folderid . "','" . $folderTitle . "','" . $parent . "','" . $parent_name . "','" . $path . "')";
        mysqli_query($link, $sql);
 
         header("Location: photo_folder_list.php");
@@ -104,6 +105,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <?php }
                         }?>
                                 </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label"><strong>Folder Title * :</strong></label>
+                            <div class="controls">
+                                <input class="span11" style="height:35px" placeholder="Title" type="text"
+                                    name="folderTitle" id="folderTitle" required value="<?php echo  $folderTitle?>">
+                                <span class="span10" style="color:#c1c1c1">Maximum 200 charecters allowed</span>
                             </div>
                         </div>
                         <div class="control-group">
