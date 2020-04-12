@@ -124,7 +124,7 @@ if ($uploadOk == 0) {
                                     <?php 
                                     if (mysqli_num_rows($resultcat) > 0) {
                          while ($value = mysqli_fetch_assoc($resultcat)) {?>
-                                    <option value="<?php echo $value['id'].'++'.$value['folderid'].'++'.$value['path'];?>"
+                                    <option value="<?php echo $value['id'].'++'.$value['folderId'].'++'.$value['path'];?>"
                                         <?php echo (!empty($getAcharya) && in_array($value['id'],$getAcharya)) ? "selected" : "" ?>>
                                         <?php echo $value['foldername'];?></option>
                                     <?php 
@@ -135,7 +135,7 @@ if ($uploadOk == 0) {
                                         while ($value1 = mysqli_fetch_assoc($resultChild)) {
                                             $nbsp = $value['foldername']." >>> ";
                                             ?>
-                                    <option value="<?php echo $value['id'].'++'. $value['folderid'].'++'.$value1['path'];?>">
+                                    <option value="<?php echo $value1['id'].'++'. $value1['folderId'].'++'.$value1['path'];?>">
                                         <?php echo $nbsp.$value1['foldername'];?></option>
                                     <?php  }
                                 }
