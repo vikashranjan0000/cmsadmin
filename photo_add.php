@@ -111,7 +111,7 @@ if ($uploadOk == 0) {
                 ?>
                 <div class="widget-content nopadding">
                     <?php 
-                        $sqlcat = "Select * from   tb_od_folder where parent=0 order by foldername ASC";
+                        $sqlcat = "Select * from   tb_od_folder where parent=19 order by foldername ASC";
                         $resultcat = mysqli_query($link, $sqlcat);
                         ?>
                     <form action="#" method="post" class="form-horizontal form-group-lg" accept-charset="utf-8"
@@ -120,7 +120,7 @@ if ($uploadOk == 0) {
                             <label class="control-label"><strong>Select Folder *:</strong></label>
                             <div class="controls">
                                 <select id="parent" name="parent">
-                                    <option value="0">None</option>
+                                   <!--  <option value="0">None</option> -->
                                     <?php 
                                     if (mysqli_num_rows($resultcat) > 0) {
                          while ($value = mysqli_fetch_assoc($resultcat)) {?>

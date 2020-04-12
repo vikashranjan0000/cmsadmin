@@ -8,38 +8,41 @@
 $parent = (isset($output['parent'])&& !empty($output['parent']))?$output['parent']:'';
 $foldername = (isset($output['foldername'])&& !empty($output['foldername']))?$output['foldername']:'';
 $folderTitle = (isset($output['folderTitle'])&& !empty($output['folderTitle']))?$output['folderTitle']:'';
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $foldername = strtolower(trim($_POST['foldername']));
+    $folderTitle = trim($_POST['folderTitle']);
     $foldername = str_replace(' ', '-', $foldername); // Replaces all spaces with hyphens.
     $foldername= preg_replace('/[^A-Za-z0-9\-]/', '', $foldername); // Removes special chars.
     $folderid = time();
     
     $exists = false;
     if($_POST['parent'] =='0'){
-         $path = 'uploads/'.$folderid;
-        if(!is_dir($path)){
-            mkdir($path, 0777, true) ;
-        }else{
-            $exists = true; 
-        } 
-       $parent =0;
-       $parent_name = 'uploads';
-    }else{
         $explode = explode('++',$_POST['parent']);       
-        $path = 'uploads/'.$explode['1'].'/'.$folderid;
+        $path = $explode['3'].'/'.$folderid;
         if(!is_dir($path)){
             mkdir($path, 0777, true) ;
         }else{
             $exists = true; 
         } 
        $parent =(int)$explode[0];
-       $parent_name = $explode['1'];
+       $parentFolderId =$explode['1'];
+       $parent_name = $explode['2'];
+    }else{
+        $explode = explode('++',$_POST['parent']);       
+        $path = $explode['3'].'/'.$folderid;
+        if(!is_dir($path)){
+            mkdir($path, 0777, true) ;
+        }else{
+            $exists = true; 
+        } 
+       $parent =(int)$explode[0];
+       $parentFolderId =$explode['1'];
+       $parent_name = $explode['2'];
 
     }
     if (!empty($foldername) && (!$exists)) {
-           $sql = "INSERT INTO tb_od_folder(foldername, folderId , folderTitle,parent,parent_name,path)
-            VALUES ('" . $foldername . "','" . $folderid . "','" . $folderTitle . "','" . $parent . "','" . $parent_name . "','" . $path . "')";
+           $sql = "INSERT INTO tb_od_folder(foldername, folderId , folderTitle, parent, parentFolderId, parent_name, path)
+            VALUES ('" . $foldername . "','" . $folderid . "','" . $folderTitle . "','" . $parent . "','" . $parentFolderId . "','" . $parent_name . "','" . $path . "')";
        mysqli_query($link, $sql);
 
         header("Location: photo_folder_list.php");
@@ -85,7 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 ?>
                 <div class="widget-content nopadding">
                     <?php 
-                        $sqlcat = "Select * from   tb_od_folder where parent=0 order by foldername ASC";
+                        $sqlcat = "Select * from   tb_od_folder where 1 order by foldername ASC";
                         $resultcat = mysqli_query($link, $sqlcat);
                         ?>
                     <form action="#" method="post" class="form-horizontal form-group-lg" accept-charset="utf-8"
@@ -95,15 +98,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <label class="control-label"><strong>Parent Folder *:</strong></label>
                             <div class="controls">
                                 <select id="parent" name="parent">
-                                    <option value="0">root</option>
+                                    
                                     <?php 
                                     if (mysqli_num_rows($resultcat) > 0) {
-                         while ($value = mysqli_fetch_assoc($resultcat)) {?>
-                                    <option value="<?php echo $value['id'].'++'.$value['foldername'];?>"
-                                        <?php echo (!empty($getAcharya) && in_array($value['id'],$getAcharya)) ? "selected" : "" ?>>
-                                        <?php echo $value['foldername'];?></option>
-                                    <?php }
-                        }?>
+                                        while ($value = mysqli_fetch_assoc($resultcat)) {?>
+                                            <option value="<?php echo $value['id'].'++'.$value['folderId'].'++'.$value['foldername'].'++'.$value['path'];?>">
+                                                <?php echo $value['foldername'];?></option>
+                                        <?php }
+                                    }?>
                                 </select>
                             </div>
                         </div>
