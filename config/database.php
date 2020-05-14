@@ -1,7 +1,11 @@
 <?php
-$servername = "localhost";
+/*$servername = "localhost";
 $username = "gallerytest";
-$password = "CF^xv,*90,$;";
+$password = "CF^xv,*90,$;";*/
+
+$servername = "localhost";
+$username = "root";
+$password = "";
 
 // Create connection
 $link  = new mysqli($servername, $username, $password,'oshodhara');
