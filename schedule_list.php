@@ -146,7 +146,7 @@ tr:nth-child(odd) {
                                     <?php 
                                     if (mysqli_num_rows($resultcat) > 0) {
                          while ($value = mysqli_fetch_assoc($resultcat)) {
-                            $programid = (isset($value['programid'])&& !empty($value['programid']))?$value['programid']:'';
+                            $programid = (isset($value) && isset($value['programid'])&& !empty($value['programid']))?$value['programid']:'';
                              ?>
                                     <option value="<?php echo $value['programid'];?>"
                                         <?php echo (isset($_GET['programid']) && $programid == $_GET['programid']) ? "selected" : "" ?>>

@@ -9,10 +9,9 @@ $parent = (isset($output['parent'])&& !empty($output['parent']))?$output['parent
 $foldername = (isset($output['foldername'])&& !empty($output['foldername']))?$output['foldername']:'';
 $folderTitle = (isset($output['folderTitle'])&& !empty($output['folderTitle']))?$output['folderTitle']:'';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $foldername = strtolower(trim($_POST['foldername']));
-    $folderTitle = trim($_POST['folderTitle']);
-    $foldername = str_replace(' ', '-', $foldername); // Replaces all spaces with hyphens.
-    $foldername= preg_replace('/[^A-Za-z0-9\-]/', '', $foldername); // Removes special chars.
+    $foldername = trim($_POST['foldername']);
+    $folderTitle = trim($_POST['folderTitle']);// Replaces all spaces with hyphens.
+    $foldername= preg_replace('/[^A-Za-z0-9\- ]/', '', $foldername); // Removes special chars.
     $folderid = time();
     
     $exists = false;

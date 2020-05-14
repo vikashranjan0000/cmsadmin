@@ -4,7 +4,7 @@
 <?php include_once 'templates/sidebar.php';  ?>
 <?php
 $action = $_GET['action'];
-if($_GET['action'] = 'edit' && isset($_GET['id'])){
+if(isset($_GET) && $_GET['action'] = 'edit' && isset($_GET['id'])){
   $id = $_GET['id'];
     $sql = "Select * from   tb_od_programschedule where scheduleid=$id";
     $result = mysqli_query($link, $sql);
@@ -14,44 +14,53 @@ if($_GET['action'] = 'edit' && isset($_GET['id'])){
     }
 }
 $programid = (isset($output['programid'])&& !empty($output['programid']))?$output['programid']:'';
+$programName = (isset($output['programName'])&& !empty($output['programName']))?$output['programName']:'';
 $dhyankendraid = (isset($output['dhyankendraid'])&& !empty($output['dhyankendraid']))?$output['dhyankendraid']:'';
-$level  = (isset($output['level'])&& !empty($output['level']))?$output['level']:'';
+$locationName = (isset($output['locationName'])&& !empty($output['locationName']))?$output['locationName']:'';
+$leadacharyaid = (isset($output['leadacharyaid'])&& !empty($output['leadacharyaid']))?$output['leadacharyaid']:'';
+$otherAchraya = (isset($output['otherAchraya'])&& !empty($output['otherAchraya']))?$output['otherAchraya']:'';
 $start_date  = (isset($output['start_date'])&& !empty($output['start_date']))?$output['start_date']:'';
 $end_date  = (isset($output['end_date'])&& !empty($output['end_date']))?$output['end_date']:'';
-$duration  = (isset($output['duration'])&& !empty($output['duration']))?$output['duration']:'';
+$session1  = (isset($output['session1'])&& !empty($output['session1']))?$output['session1']:'';
+$session2  = (isset($output['session2'])&& !empty($output['session2']))?$output['session2']:'';
+$programMode  = (isset($output['programMode'])&& !empty($output['programMode']))?$output['programMode']:'';
+$ContributionAmount  = (isset($output['ContributionAmount'])&& !empty($output['ContributionAmount']))?$output['ContributionAmount']:'';
 $eligibility  = (isset($output['eligibility'])&& !empty($output['eligibility']))?$output['eligibility']:'';
 $guidelines  = (isset($output['guidelines'])&& !empty($output['guidelines']))?$output['guidelines']:'';
 $comments  = (isset($output['comments'])&& !empty($output['comments']))?$output['comments']:'';
+$level  = (isset($output['level'])&& !empty($output['level']))?$output['level']:'';
+$duration  = (isset($output['duration'])&& !empty($output['duration']))?$output['duration']:'';
 $language  = (isset($output['language'])&& !empty($output['language']))?$output['language']:'';
-//
- $sqlSc = "Select * from ProgScheduleacharya where scheduleid= '$id' ";
-$resultcat = mysqli_query($link, $sqlSc);
-if(mysqli_error($link)){
-    echo("Error description1: " . mysqli_error($link));die;
-}
-while ($valueid = mysqli_fetch_assoc($resultcat)) {
-    $getAcharya[] = $valueid['acharyaid'];
-}
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-   // echo "<PRE>";print_r($_POST);die; 
+
     $programid = (isset($_POST['programid'])&& !empty($_POST['programid']))?$_POST['programid']:'';
+    $programName = (isset($_POST['programName'])&& !empty($_POST['programName']))?$_POST['programName']:'';
     $dhyankendraid = (isset($_POST['dhyankendraid'])&& !empty($_POST['dhyankendraid']))?$_POST['dhyankendraid']:'';
-    $level  = (isset($_POST['level'])&& !empty($_POST['level']))?$_POST['level']:'';
+    $locationName = (isset($_POST['locationName'])&& !empty($_POST['locationName']))?$_POST['locationName']:'';
+
+    $leadacharyaid = (isset($_POST['leadacharyaid'])&& !empty($_POST['leadacharyaid']))?$_POST['leadacharyaid']:'';
+    $otherAchraya = (isset($_POST['otherAchraya'])&& !empty($_POST['otherAchraya']))?$_POST['otherAchraya']:'';
     $start_date  = (isset($_POST['start_date'])&& !empty($_POST['start_date']))?$_POST['start_date']:'';
     $end_date  = (isset($_POST['end_date'])&& !empty($_POST['end_date']))?$_POST['end_date']:'';
-    $duration  = (isset($_POST['duration'])&& !empty($_POST['duration']))?$_POST['duration']:'';
+    $start_date= date( "Y-m-d", strtotime($start_date) );
+    $end_date= date( "Y-m-d", strtotime($end_date) );
+    $session1  = (isset($_POST['session1'])&& !empty($_POST['session1']))?$_POST['session1']:'';
+    $session2  = (isset($_POST['session2'])&& !empty($_POST['session2']))?$_POST['session2']:'';
+    $programMode  = (isset($_POST['programMode'])&& !empty($_POST['programMode']))?$_POST['programMode']:'';
+    $ContributionAmount  = (isset($_POST['ContributionAmount'])&& !empty($_POST['ContributionAmount']))?$_POST['ContributionAmount']:'';
     $eligibility  = (isset($_POST['eligibility'])&& !empty($_POST['eligibility']))?$_POST['eligibility']:'';
     $guidelines  = (isset($_POST['guidelines'])&& !empty($_POST['guidelines']))?$_POST['guidelines']:'';
     $comments  = (isset($_POST['comments'])&& !empty($_POST['comments']))?$_POST['comments']:'';
+    $level  = (isset($_POST['level'])&& !empty($_POST['level']))?$_POST['level']:'';
+    $duration  = (isset($_POST['duration'])&& !empty($_POST['duration']))?$_POST['duration']:'';
     $language  = (isset($_POST['language'])&& !empty($_POST['language']))?$_POST['language']:'';
-    $start_date= date( "Y-m-d", strtotime($start_date) );
-    $end_date= date( "Y-m-d", strtotime($end_date) );
 
     if (!empty($programid)) {
         if($_POST['action'] == 'add'){
-              $sql = "INSERT INTO tb_od_programschedule(programid , dhyankendraid,level,start_date,end_date,duration,eligibility,guidelines,comments,language,status)
-            VALUES ('" . $programid . "','" . $dhyankendraid . "', '" . $level . "', '" . $start_date . "', '" . $end_date . "', '" . $duration . "','" . $eligibility . "','" . $guidelines . "','" . $comments . "','" . $language . "',1)";
+              $sql = "INSERT INTO tb_od_programschedule(programid , programName, dhyankendraid, locationName, level, leadAcharya, otherAchraya , start_date, end_date, session1, session2, ContributionAmount, duration, eligibility, guidelines, comments, language, programMode, status)
+            VALUES ('" . $programid . "','" . $programName . "', '" . $dhyankendraid . "', '" . $locationName . "', '" . $level . "', '" . $leadacharyaid. "', '" . $otherAchraya . "','" . $start_date . "', '" . $end_date . "', '" . $session1 . "', '" . $session2 . "', '" . $ContributionAmount . "','" . $duration . "','" . $eligibility . "','" . $guidelines . "','" . $comments . "','" . $language  . "','" . $programMode ."', 1)";
     }else{
         $id = $_GET['id'];
         $sql= "UPDATE tb_od_programschedule SET programid='$programid',dhyankendraid='$dhyankendraid',start_date='$start_date',end_date='$end_date',level='$level', duration= '$duration' ,eligibility= '$eligibility',guidelines='$guidelines',comments='$comments',language='$language' WHERE scheduleid=$id";
@@ -60,9 +69,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
      if(mysqli_error($link)){
         echo("Error description 2: " . mysqli_error($link));die;
     }
-    if(isset($_POST['acharyaid']) && !empty($_POST['acharyaid'])){
+/*    if(isset($_POST['acharyaid']) && !empty($_POST['acharyaid'])){
         $id = $_GET['id'];
-        // Delete older mapping schedule id and acharya id
          $sqldel = "DELETE FROM ProgScheduleacharya WHERE scheduleid = $id ";
          mysqli_query($link, $sqldel);
          if(mysqli_error($link)){
@@ -88,7 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         }
       
-    } 
+    } */
 
      header("Location: schedule_add_edit.php?action=add&msg=1");
     } else {
@@ -115,10 +123,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!--End-breadcrumbs-->
 
     <div class="container-fluid">
-        <!--Action boxes-->
-        <!--End-Action boxes-->
         <hr />
-        <!--form element start -->
+       
         <div class="row-fluid">
             <div class="widget-box">
                 <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
@@ -135,13 +141,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="widget-content nopadding">
 
                     <form action="#" method="post" class="form-horizontal form-group-lg" accept-charset="utf-8"
-                        enctype='multipart/form-data' name="form" id="form">
+                        enctype='multipart/form-data' name="scheduleform" id="scheduleform">
                         <input type="hidden" name="action" id="action" value="<?php echo $action ?>" />
 
 
                         <?php 
-                        $sqlcat = "Select * from   tb_od_program where status=1 order by programid DESC";
-                        $resultcat = mysqli_query($link, $sqlcat);
+                        $sqlProg = "Select * from   tb_od_program where status=1 order by programid DESC";
+                        $resultProg = mysqli_query($link, $sqlProg);
                         ?>
 
                         <div class="control-group">
@@ -149,64 +155,85 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="controls">
                                 <select id="programid" name="programid" required>
                                     <?php 
-                                    if (mysqli_num_rows($resultcat) > 0) {
-                         while ($value = mysqli_fetch_assoc($resultcat)) {?>
-                                    <option value="<?php echo $value['programid'];?>"
-                                        <?php echo (!empty($programid)) ? "selected" : "" ?>>
-                                        <?php echo $value['programname'];?></option>
-                                    <?php }
-                        }?>
+                                    if (mysqli_num_rows($resultProg) > 0) {
+                                        while ($value = mysqli_fetch_assoc($resultProg)) {?>
+                                            <option value="<?php echo $value['programid'];?>"
+                                                <?php echo (!empty($programname)) ? "selected" : "" ?>>
+                                                <?php echo $value['programname'];?></option>
+                                            <?php }
+                                        }?>
+                                        <input type="hidden" name="programName" id="programName" value="<?php echo $programName ?>" />
                                 </select>
                             </div>
                         </div>
                         <?php 
                         $resultcat ='';
-                        $sqlcat = "Select * from   tb_od_dhyankendra where status=1 order by dhyankendraid desc";
-                        $resultcat = mysqli_query($link, $sqlcat);
+                        $sqlcenter = "Select * from   tb_od_dhyankendra where status=1 order by dhyankendraid desc";
+                        $resultcent= mysqli_query($link, $sqlcenter);
                         ?>
 
                         <div class="control-group">
-                            <label class="control-label"><strong>Dhyankendra Name *:</strong></label>
+                            <label class="control-label"><strong>Centers Name *:</strong></label>
                             <div class="controls">
                                 <select id="dhyankendraid" name="dhyankendraid">
                                     <?php 
-                                    if (mysqli_num_rows($resultcat) > 0) {
-                         while ($value = mysqli_fetch_assoc($resultcat)) {?>
-                                    <option value="<?php echo $value['dhyankendraid'];?>"
-                                        <?php echo (!empty($dhyankendraid) && $value['dhyankendraid'] ==$dhyankendraid) ? "selected" : "" ?>>
-                                        <?php echo $value['dhyankendraname'];?></option>
-                                    <?php }
-                        }?>
+                                    if (mysqli_num_rows($resultcent) > 0) {
+                                        while ($value = mysqli_fetch_assoc($resultcent)) {?>
+                                            <option value="<?php echo $value['dhyankendraid'];?>"
+                                                <?php echo (!empty($dhyankendraid) && $value['dhyankendraid'] ==$dhyankendraid) ? "selected" : "" ?>>
+                                                <?php echo $value['dhyankendraname'].", ". $value['Address1'];?></option>
+                                            <?php }
+                                        }?>
                                 </select>
+                                <input type="hidden" name="locationName" id="locationName" value="<?php echo $locationName ?>" />
                             </div>
                         </div>
+
+
                         <?php 
-                        $sqlcat = "Select * from   tb_od_teammember where status=1 and isacharya=1 order by isacharya desc";
-                        $resultcat = mysqli_query($link, $sqlcat);
+                        $sqlAchrya = "Select * from   tb_od_teammember where status=1 and isacharya=1 order by isacharya desc";
+                        $resultAchraya = mysqli_query($link, $sqlAchrya);
                         ?>
 
                         <div class="control-group">
-                            <label class="control-label"><strong>Acharya's *:</strong></label>
+                            <label class="control-label"><strong>Lead Acharya *:</strong></label>
                             <div class="controls">
-                                <select id="acharyaid" name="acharyaid[]" multiple>
+                                <select id="leadacharyaid" name="leadacharyaid" >
                                     <?php 
-                                    if (mysqli_num_rows($resultcat) > 0) {
-                         while ($value = mysqli_fetch_assoc($resultcat)) {?>
-                                    <option value="<?php echo $value['teammemberid'];?>"
-                                        <?php echo (!empty($getAcharya) && in_array($value['teammemberid'],$getAcharya)) ? "selected" : "" ?>>
-                                        <?php echo $value['teammembername'];?></option>
-                                    <?php }
-                        }?>
+                                    if (mysqli_num_rows($resultAchraya) > 0) {
+                                        while ($value = mysqli_fetch_assoc($resultAchraya)) {?>
+                                            <option value="<?php echo $value['teammembername'];?>"
+                                                <?php echo (!empty($getAcharya) && in_array($value['teammembername'],$getAcharya)) ? "selected" : "" ?>>
+                                                <?php echo $value['teammembername'];?></option>
+                                            <?php }
+                                        }?>
                                 </select>
                             </div>
                         </div>
+
+                        <?php 
+                            $sqlAchrya = "Select * from   tb_od_teammember where status=1 and isacharya=1 order by isacharya desc";
+                            $resultAchraya = mysqli_query($link, $sqlAchrya);
+                        ?>
+
                         <div class="control-group">
-                            <label class="control-label"><strong>Level * :</strong></label>
+                            <label class="control-label"><strong>Other Acharyas:</strong></label>
                             <div class="controls">
-                                <input class="span11" style="height:35px" placeholder="Enter level" type="number"
-                                    min='0' name="level" id="level" required value="<?php echo $level?>">
+                                <select id="otherAchraya" name="otherAchraya[]" multiple>
+                                    <?php 
+                                    if (mysqli_num_rows($resultAchraya) > 0) {
+                                        while ($value = mysqli_fetch_assoc($resultAchraya)) {?>
+                                            <option value="<?php echo $value['teammembername'];?>"
+                                                <?php echo (!empty($getAcharya) && in_array($value['teammembername'],$getAcharya)) ? "selected" : "" ?>>
+                                                <?php echo $value['teammembername'];?></option>
+                                            <?php }
+                                        }?>
+                                </select>
                             </div>
                         </div>
+
+
+
                         <div class="control-group">
                             <label class="control-label"><strong>Start Date * :</strong></label>
                             <div class="form-group span2 m-wrap input-append date datepicker" data-date="12-02-2012">
@@ -216,7 +243,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     id="start_date" value="<?php echo $start_date?>">
                                 <span class="add-on" style="height:20px"><i class="fa fa-th"></i></span>
                             </div>
-
                         </div>
                         <div class="control-group">
                             <label class="control-label"><strong>End Date * :</strong></label>
@@ -229,6 +255,47 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </div>
 
                         </div>
+
+                        <div class="control-group">
+                            <label class="control-label"><strong>Session 1 :</strong></label>
+                            <div class="controls">
+                                <input class="span11" style="height:35px" placeholder="Enter session1" type="text"
+                                 name="session1" id="session1" required value="<?php echo $session1?>">
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label"><strong>Session 2:</strong></label>
+                            <div class="controls">
+                                <input class="span11" style="height:35px" placeholder="Enter session2" type="text"
+                                     name="session2" id="session2" required value="<?php echo $session2?>">
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label"><strong>Program Mode :</strong></label>
+                            <div class="controls">
+                                <select id="programMode" name="programMode">                                    
+                                    <option value="Online" <?php echo ('Online' == $programMode) ? "selected" : "" ?>>Online</option>
+                                    <option value="Residential" <?php echo ('Residential' == $programMode) ? "selected" : "" ?>>Residential</option>
+                                </select>
+                            </div>
+                        </div>
+                       
+                        <div class="control-group">
+                            <label class="control-label"><strong>Contribution Amount :</strong></label>
+                            <div class="controls">
+                                <input class="span11" style="height:35px" placeholder="Enter ContributionAmount" type="number"
+                                    min='0' name="ContributionAmount" id="ContributionAmount" required value="<?php echo $ContributionAmount?>">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label"><strong>Level * :</strong></label>
+                            <div class="controls">
+                                <input class="span11" style="height:35px" placeholder="Enter level" type="number"
+                                    min='0' name="level" id="level" required value="<?php echo $level?>">
+                            </div>
+                        </div>
                         <div class="control-group">
                             <label class="control-label"><strong>Duration * :</strong></label>
                             <div class="controls">
@@ -240,115 +307,81 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <div class="control-group">
                             <label class="control-label"><strong>Eligibility* :</strong></label>
                             <div class="controls">
-
-                                <script src="ckeditor/ckeditor.js?v=2.4" type="text/javascript"></script>
-                                </head>
-
-                                <body>
-
-                                    <!-- Editor -->
-                                    <textarea name="eligibility" rows="8"
-                                        cols="60"><?php echo htmlspecialchars( $eligibility ); ?></textarea>
-
-                                    <!-- Script -->
-                                    <script type="text/javascript">
-                                    CKEDITOR.replace('eligibility', {
-                                        height: 300,
-                                        filebrowserUploadUrl: "ajaxfile.php?type=file",
-                                        filebrowserImageUploadUrl: "ajaxfile.php?type=image",
-
-                                    });
-                                    </script>
+                                <input class="span11" style="height:35px" placeholder="Enter Eligibility"
+                                    type="text" name="eligibility" id="eligibility" required
+                                    value="<?php echo $eligibility?>">
+                             
                             </div>
-                            <div class="control-group">
-                                <label class="control-label"><strong>Guidelines* :</strong></label>
-                                <div class="controls">
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label"><strong>Guidelines* :</strong></label>
+                            <div class="controls">
+                                <input class="span11" style="height:35px" placeholder="Enter guidelines"
+                                type="text" name="guidelines" id="guidelines" required
+                                value="<?php echo $guidelines?>">                                
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label"><strong>Comments* :</strong></label>
+                            <div class="controls">
+                                <input class="span11" style="height:35px" placeholder="Enter comments"
+                                type="text" name="comments" id="comments" required
+                                value="<?php echo $comments?>">                                 
+                            </div>
+                        </div>
 
-                                    <!-- <script src="ckeditor/ckeditor.js" type="text/javascript"></script>-->
-                                    </head>
-
-                                    <body>
-
-                                        <!-- Editor -->
-                                        <textarea name="guidelines" rows="8"
-                                            cols="60"><?php echo htmlspecialchars( $guidelines ); ?></textarea>
-
-                                        <!-- Script -->
-                                        <script type="text/javascript">
-                                        CKEDITOR.replace('guidelines', {
-                                            height: 300,
-                                            filebrowserUploadUrl: "ajaxfile.php?type=file",
-                                            filebrowserImageUploadUrl: "ajaxfile.php?type=image",
-
-                                        });
-                                        </script>
-                                </div>
-                                <div class="control-group">
-                                    <label class="control-label"><strong>Comments* :</strong></label>
-                                    <div class="controls">
-
-                                        <!-- <script src="ckeditor/ckeditor.js" type="text/javascript"></script>-->
-                                        </head>
-
-                                        <body>
-
-                                            <!-- Editor -->
-                                            <textarea name="comments" rows="8"
-                                                cols="60"><?php echo htmlspecialchars( $comments ); ?></textarea>
-
-                                            <!-- Script -->
-                                            <script type="text/javascript">
-                                            CKEDITOR.replace('comments', {
-                                                height: 300,
-                                                filebrowserUploadUrl: "ajaxfile.php?type=file",
-                                                filebrowserImageUploadUrl: "ajaxfile.php?type=image",
-
-                                            });
-                                            </script>
-                                    </div>
-
-                                    <div class="control-group">
-                                        <label class="control-label"><strong>Language *:</strong></label>
-                                        <div class="controls">
-                                            <select id="language" name="language">
-                                                <?php 
+                        <div class="control-group">
+                            <label class="control-label"><strong>Language *:</strong></label>
+                            <div class="controls">
+                                <select id="language" name="language">
+                                    <?php 
                                     foreach($lang_config as $k=>$v){
                                         ?>
-                                                <option value="<?php echo $v?>"
-                                                    <?php echo ($v == $language) ? "selected" : "" ?>>
-                                                    <?php echo $k;?> </option>
-                                                <?php    }
+                                        <option value="<?php echo $v?>"
+                                            <?php echo ($v == $language) ? "selected" : "" ?>>
+                                            <?php echo $k;?> </option>
+                                        <?php    }
                                     ?>
-
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-actions">
-                                        <button onclick="return validate()" type="submit" class="btn btn-primary"
-                                            name="save" value="1">Publish</button>
-                                        <a href="schedule_list.php"><input type="button" class="btn btn-danger"
-                                                value="Cancel"></a>
-                                    </div>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button onclick="return validate()" type="submit" class="btn btn-primary"
+                                name="save" value="1">Publish</button>
+                            <a href="schedule_list.php"><input type="button" class="btn btn-danger"
+                                    value="Cancel"></a>
+                        </div>
                     </form>
-
                 </div>
             </div>
         </div>
-        <!--form element end -->
     </div>
 </div>
 
 <script>
 function validate() {
-    var programid = $("#programid").val();
+
+
+    var programid = $("#programid").val();   
+    $('#programName').val($("#programid option:selected").text());
+
     var dhyankendraid = $("#dhyankendraid").val();
+    $('#locationName').val($("#dhyankendraid option:selected").text());
+
     var duration = $("#duration").val();
     var level = $("#level").val();
     var start_date = $('#start_date').val();
     var end_date = $('#end_date').val();
     var startDate = new Date($('#start_date').val());
     var endDate = new Date($('#end_date').val());
-    var acharyaid = $("#acharyaid").val();
+    var acharyaid = $("#leadacharyaid").val();
+
+
+    var data = new FormData($('form')[0]);
+    data.append("route",1);
+    data.set('field','newValue'); 
+
+
     if (!acharyaid || acharyaid == null || acharyaid == 'null') {
         alert('Kindly select Acharyas ');
         return false;
@@ -376,6 +409,9 @@ function validate() {
         alert('Kindly enter Program Name');
         return false;
     }
+    else{
+
+    }
     if (dhyankendraid.trim() == '') {
         alert('Kindly enter dhyankendra name');
         return false;
@@ -385,15 +421,6 @@ function validate() {
         return false;
     }
 
-
-    if (CKEDITOR.instances['eligibility'].getData() == "") {
-        alert('Kindly enter eligibility');
-        return false;
-    }
-    if (CKEDITOR.instances['guidelines'].getData() == "") {
-        alert('Kindly enter guidelines');
-        return false;
-    }
 }
 </script>
 <?php include_once 'templates/footer.php'; ?>
