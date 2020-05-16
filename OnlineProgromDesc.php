@@ -12,7 +12,7 @@ if($_GET['action'] = 'edit' && isset($_GET['id'])){
 }
 $programname = (isset($output['programname'])&& !empty($output['programname']))?$output['programname']:'';
 $titleDescription = (isset($output['titleDescription'])&& !empty($output['titleDescription']))?$output['titleDescription']:'';
-$longdescription  = (isset($output['longdescription'])&& !empty($output['longdescription']))?$output['longdescription']:'';
+$longDescription  = (isset($output['longDescription'])&& !empty($output['longDescription']))?$output['longDescription']:'';
 $language  = (isset($output['language'])&& !empty($output['language']))?$output['language']:'';
 $progromLevel  = (isset($output['progromLevel'])&& !empty($output['progromLevel']))?$output['progromLevel']:'';
 
@@ -20,23 +20,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $name = trim($_POST['name']);
     $titleDescription = trim($_POST['titleDescription']);
-    $longdescription = trim($_POST['details']); 
+    $longDescription = trim($_POST['longDescription']); 
      $language = $_POST['language'];
      $progromLevel = $_POST['progromLevel'];
     if (!empty($name)) {
  
         if($_POST['action'] == 'add'){
-              $sql = "INSERT INTO tb_od_onlineProgram(programname ,progromLevel, titleDescription,longdescription,status,language)
-            VALUES ('" . $name . "','" . $progromLevel . "','" . $short_description . "', '" . $longdescription . "',1,'" . $language . "', '" . $mandatoryprogromid . "')";
+              $sql = "INSERT INTO tb_od_onlineProgram(programname ,progromLevel, titleDescription,longDescription,status,language)
+            VALUES ('" . $name . "','" . $progromLevel . "','" . $titleDescription . "', '" . $longDescription . "',1,'" . $language . "')";
         }else{
             $id = $_GET['id'];
-            $sql= "UPDATE tb_od_onlineProgram SET progromLevel='$progromLevel',titleDescription='$short_description', programname= '$name',language= '$language',longdescription='$longdescription' WHERE onlineProgramid=$id";
+            $sql= "UPDATE tb_od_onlineProgram SET progromLevel='$progromLevel',titleDescription='$titleDescription', programname= '$name',language= '$language',longDescription='$longDescription' WHERE onlineProgramid=$id";
         }
      
         mysqli_query($link, $sql);
-        header("Location: program_add_edit.php?action=add&msg=1");
+        header("Location: onlineProgromList.php?action=add&msg=1");
     } else {
-        header("Location: program_add_edit.php?action=add&msg=0");
+        header("Location: onlineProgromList.php?action=add&msg=0");
     }
 }
 
@@ -51,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </style>
 <div id="content">
     <div id="content-header">
-        <div id="onlineBreadcrumb"> <a href="onlineProgram_list.php" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>
+        <div id="onlineBreadcrumb"> <a href="onlineProgromList.php" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>
                 Listing</a><a href="#">Add Online Program Description</a></div>
     </div>
     <div class="container-fluid">
@@ -92,7 +92,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <div class="control-group">
                             <label class="control-label"><strong>Long Description*:</strong></label>
                             <div class="controls">
-                                <input class="span11" style="height:35px" placeholder="Long Description" type="text"  name="details" id="details"  value="<?php echo $longdescription?>">
+                               <!--  <input class="span11" style="height:35px" placeholder="Long Description" type="text"  name="longDescription" id="longDescription" value="<?php echo $longDescription?>"> -->
+
+                                <textarea class="span11"  placeholder="Long Description" type="text"  name="longDescription" id="longDescription" rows="5"><?php echo $longDescription?></textarea>
                             </div>
                         </div>
 
@@ -124,7 +126,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="form-actions">
                                 <button onclick="return validate()" type="submit" class="btn btn-primary" name="save"
                                     value="1">Publish</button>
-                                <a href="program_list.php"><input type="button" class="btn btn-danger"
+                                <a href="onlineProgromList.php"><input type="button" class="btn btn-danger"
                                         value="Cancel"></a>
                             </div>
                     </form>
@@ -139,20 +141,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <script>
 function validate() {
     var name = $("#name").val();
-    var description = $("#details").val();
-    var categoryid = $("#categoryid").val();
-
 
     if (name.trim() == '') {
         alert('Kindly enter Program Name');
         return false;
     }
- 
 
-    if (!categoryid || categoryid == null || categoryid == 'null') {
-        alert('Kindly enter Program Category');
-        return false;
-    }
 }
 </script>
 <?php include_once 'templates/footer.php'; ?>

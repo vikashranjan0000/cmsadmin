@@ -130,7 +130,6 @@ tr:nth-child(odd) {
                                 $i = 0;
                                 while ($row = mysqli_fetch_assoc($result)) {
                                     $i++; ?>
-(programname ,progromLevel, titleDescription,longdescription,status,language)
                             <tr class="gradeX">
                                 <td><?php echo $i ?></td>
                                 <td><strong><?php echo $row['programname']; ?></strong></td>
@@ -206,7 +205,7 @@ $num_results_on_page = 10;
                             <li class="currentpage"><a
                                     href="onlineProgromList.php?page=<?php echo $page ?>"><?php echo $page ?></a></li>
 
-                  onlineProgromListonlineProgromListonlineProgromListonlineProgromList          <?php if ($page+1 < ceil($total_pages / $num_results_on_page)+1): ?><li class="page"><a
+                           <?php if ($page+1 < ceil($total_pages / $num_results_on_page)+1): ?><li class="page"><a
                                     href="onlineProgromList.php?page=<?php echo $page+1 ?>"><?php echo $page+1 ?></a></li>
                             <?php endif; ?>
                             <?php if ($page+2 < ceil($total_pages / $num_results_on_page)+1): ?><li class="page"><a
